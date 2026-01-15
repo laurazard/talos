@@ -3178,6 +3178,108 @@
       ],
       "description": "WatchdogTimerConfig is a watchdog timer config document."
     },
+    "security.ImageVerificationConfigV1Alpha1": {
+      "properties": {
+        "apiVersion": {
+          "enum": [
+            "v1alpha1"
+          ],
+          "title": "apiVersion",
+          "description": "apiVersion is the API version of the resource.\n",
+          "markdownDescription": "apiVersion is the API version of the resource.",
+          "x-intellij-html-description": "\u003cp\u003eapiVersion is the API version of the resource.\u003c/p\u003e\n"
+        },
+        "kind": {
+          "enum": [
+            "ImageVerificationConfig"
+          ],
+          "title": "kind",
+          "description": "kind is the kind of the resource.\n",
+          "markdownDescription": "kind is the kind of the resource.",
+          "x-intellij-html-description": "\u003cp\u003ekind is the kind of the resource.\u003c/p\u003e\n"
+        },
+        "rules": {
+          "items": {
+            "$ref": "#/$defs/security.ImageVerificationRuleV1Alpha1"
+          },
+          "type": "array",
+          "title": "rules",
+          "description": "List of verification rules.\nRules are evaluated in order; first matching rule applies.\n",
+          "markdownDescription": "List of verification rules.\nRules are evaluated in order; first matching rule applies.",
+          "x-intellij-html-description": "\u003cp\u003eList of verification rules.\nRules are evaluated in order; first matching rule applies.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apiVersion",
+        "kind"
+      ],
+      "description": "ImageVerificationConfig configures image signature verification policy."
+    },
+    "security.ImageVerificationRuleV1Alpha1": {
+      "properties": {
+        "image": {
+          "type": "string",
+          "title": "image",
+          "description": "Registry hostname pattern to match.\nImage name pattern to match.\nSupports glob patterns. Example: “docker.io/library/nginx”, “registry.k8s.io/*”\n",
+          "markdownDescription": "Registry hostname pattern to match.\nImage name pattern to match.\nSupports glob patterns. Example: \"docker.io/library/nginx\", \"registry.k8s.io/*\"",
+          "x-intellij-html-description": "\u003cp\u003eRegistry hostname pattern to match.\nImage name pattern to match.\nSupports glob patterns. Example: \u0026ldquo;docker.io/library/nginx\u0026rdquo;, \u0026ldquo;registry.k8s.io/*\u0026rdquo;\u003c/p\u003e\n"
+        },
+        "verify": {
+          "type": "boolean",
+          "title": "verify",
+          "description": "Whether or not to verify matching references.\n",
+          "markdownDescription": "Whether or not to verify matching references.",
+          "x-intellij-html-description": "\u003cp\u003eWhether or not to verify matching references.\u003c/p\u003e\n"
+        },
+        "verifier": {
+          "$ref": "#/$defs/security.ImageVerifierV1Alpha1",
+          "title": "verifier",
+          "description": "Verifier configuration to use for this rule.\n",
+          "markdownDescription": "Verifier configuration to use for this rule.",
+          "x-intellij-html-description": "\u003cp\u003eVerifier configuration to use for this rule.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "ImageVerificationRuleV1Alpha1 defines a verification rule."
+    },
+    "security.ImageVerifierV1Alpha1": {
+      "properties": {
+        "issuer": {
+          "type": "string",
+          "title": "issuer",
+          "description": "OIDC issuer URL for keyless verification.\nExample: “https://accounts.google.com” or “https://token.actions.githubusercontent.com”\n",
+          "markdownDescription": "OIDC issuer URL for keyless verification.\nExample: \"https://accounts.google.com\" or \"https://token.actions.githubusercontent.com\"",
+          "x-intellij-html-description": "\u003cp\u003eOIDC issuer URL for keyless verification.\nExample: \u0026ldquo;\u003ca href=\"https://accounts.google.com\u0026quot;\" target=\"_blank\"\u003ehttps://accounts.google.com\u0026rdquo;\u003c/a\u003e or \u0026ldquo;\u003ca href=\"https://token.actions.githubusercontent.com\u0026quot;\" target=\"_blank\"\u003ehttps://token.actions.githubusercontent.com\u0026rdquo;\u003c/a\u003e\u003c/p\u003e\n"
+        },
+        "subject": {
+          "type": "string",
+          "title": "subject",
+          "description": "Expected subject for keyless verification.\nThis is the identity (email, URI) that signed the image.\n",
+          "markdownDescription": "Expected subject for keyless verification.\nThis is the identity (email, URI) that signed the image.",
+          "x-intellij-html-description": "\u003cp\u003eExpected subject for keyless verification.\nThis is the identity (email, URI) that signed the image.\u003c/p\u003e\n"
+        },
+        "subjectRegex": {
+          "type": "string",
+          "title": "subjectRegex",
+          "description": "Regex pattern for subject matching.\nUse this instead of subject for flexible matching.\nExample: “.*@example\\.com”\n",
+          "markdownDescription": "Regex pattern for subject matching.\nUse this instead of subject for flexible matching.\nExample: \".*@example\\\\.com\"",
+          "x-intellij-html-description": "\u003cp\u003eRegex pattern for subject matching.\nUse this instead of subject for flexible matching.\nExample: \u0026ldquo;.*@example\\.com\u0026rdquo;\u003c/p\u003e\n"
+        },
+        "rekorURL": {
+          "type": "string",
+          "title": "rekorURL",
+          "description": "Rekor transparency log URL.\n",
+          "markdownDescription": "Rekor transparency log URL.",
+          "x-intellij-html-description": "\u003cp\u003eRekor transparency log URL.\u003c/p\u003e\n"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "ImageVerifierV1Alpha1 configures a signature verification provider."
+    },
     "security.TrustedRootsConfigV1Alpha1": {
       "properties": {
         "apiVersion": {
@@ -5317,6 +5419,9 @@
     },
     {
       "$ref": "#/$defs/runtime.WatchdogTimerV1Alpha1"
+    },
+    {
+      "$ref": "#/$defs/security.ImageVerificationConfigV1Alpha1"
     },
     {
       "$ref": "#/$defs/security.TrustedRootsConfigV1Alpha1"

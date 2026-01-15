@@ -42,6 +42,116 @@ func (TrustedRootsConfigV1Alpha1) Doc() *encoder.Doc {
 	return doc
 }
 
+func (ImageVerificationConfigV1Alpha1) Doc() *encoder.Doc {
+	doc := &encoder.Doc{
+		Type:        "ImageVerificationConfig",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "ImageVerificationConfig configures image signature verification policy." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "ImageVerificationConfig configures image signature verification policy.",
+		Fields: []encoder.Doc{
+			{
+				Type:   "Meta",
+				Inline: true,
+			},
+			{
+				Name:        "rules",
+				Type:        "[]ImageVerificationRuleV1Alpha1",
+				Note:        "",
+				Description: "List of verification rules.\nRules are evaluated in order; first matching rule applies.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "List of verification rules." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+		},
+	}
+
+	doc.AddExample("", exampleImageVerificationConfigV1Alpha1())
+
+	return doc
+}
+
+func (ImageVerifierV1Alpha1) Doc() *encoder.Doc {
+	doc := &encoder.Doc{
+		Type:        "ImageVerifierV1Alpha1",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "ImageVerifierV1Alpha1 configures a signature verification provider." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "ImageVerifierV1Alpha1 configures a signature verification provider.",
+		AppearsIn: []encoder.Appearance{
+			{
+				TypeName:  "ImageVerificationRuleV1Alpha1",
+				FieldName: "verifier",
+			},
+		},
+		Fields: []encoder.Doc{
+			{
+				Name:        "issuer",
+				Type:        "string",
+				Note:        "",
+				Description: "OIDC issuer URL for keyless verification.\nExample: \"https://accounts.google.com\" or \"https://token.actions.githubusercontent.com\"",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "OIDC issuer URL for keyless verification." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+			{
+				Name:        "subject",
+				Type:        "string",
+				Note:        "",
+				Description: "Expected subject for keyless verification.\nThis is the identity (email, URI) that signed the image.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Expected subject for keyless verification." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+			{
+				Name:        "subjectRegex",
+				Type:        "string",
+				Note:        "",
+				Description: "Regex pattern for subject matching.\nUse this instead of subject for flexible matching.\nExample: \".*@example\\.com\"",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Regex pattern for subject matching." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+			{
+				Name:        "rekorURL",
+				Type:        "string",
+				Note:        "",
+				Description: "Rekor transparency log URL.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Rekor transparency log URL." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+		},
+	}
+
+	return doc
+}
+
+func (ImageVerificationRuleV1Alpha1) Doc() *encoder.Doc {
+	doc := &encoder.Doc{
+		Type:        "ImageVerificationRuleV1Alpha1",
+		Comments:    [3]string{"" /* encoder.HeadComment */, "ImageVerificationRuleV1Alpha1 defines a verification rule." /* encoder.LineComment */, "" /* encoder.FootComment */},
+		Description: "ImageVerificationRuleV1Alpha1 defines a verification rule.",
+		AppearsIn: []encoder.Appearance{
+			{
+				TypeName:  "ImageVerificationConfigV1Alpha1",
+				FieldName: "rules",
+			},
+		},
+		Fields: []encoder.Doc{
+			{
+				Name:        "image",
+				Type:        "string",
+				Note:        "",
+				Description: "Registry hostname pattern to match.\nImage name pattern to match.\nSupports glob patterns. Example: \"docker.io/library/nginx\", \"registry.k8s.io/*\"",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Registry hostname pattern to match." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+			{
+				Name:        "verify",
+				Type:        "bool",
+				Note:        "",
+				Description: "Whether or not to verify matching references.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Whether or not to verify matching references." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+			{
+				Name:        "verifier",
+				Type:        "ImageVerifierV1Alpha1",
+				Note:        "",
+				Description: "Verifier configuration to use for this rule.",
+				Comments:    [3]string{"" /* encoder.HeadComment */, "Verifier configuration to use for this rule." /* encoder.LineComment */, "" /* encoder.FootComment */},
+			},
+		},
+	}
+
+	return doc
+}
+
 // GetFileDoc returns documentation for the file security_doc.go.
 func GetFileDoc() *encoder.FileDoc {
 	return &encoder.FileDoc{
@@ -49,6 +159,9 @@ func GetFileDoc() *encoder.FileDoc {
 		Description: "Package security provides security-related machine configuration documents.\n",
 		Structs: []*encoder.Doc{
 			TrustedRootsConfigV1Alpha1{}.Doc(),
+			ImageVerificationConfigV1Alpha1{}.Doc(),
+			ImageVerifierV1Alpha1{}.Doc(),
+			ImageVerificationRuleV1Alpha1{}.Doc(),
 		},
 	}
 }

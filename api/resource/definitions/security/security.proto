@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package talos.resource.definitions.security;
+
+option go_package = "github.com/siderolabs/talos/pkg/machinery/api/resource/definitions/security";
+option java_package = "dev.talos.api.resource.definitions.security";
+
+// ImageVerificationConfigSpec represents the image verification configuration.
+message ImageVerificationConfigSpec {
+  repeated ImageVerificationRuleSpec rules = 2;
+}
+
+// ImageVerificationRuleSpec represents a verification rule.
+message ImageVerificationRuleSpec {
+  string image_pattern = 2;
+  bool verify = 3;
+  ImageVerificationVerifierSpec verifier = 4;
+}
+
+// ImageVerificationRuleV1Alpha1 defines a verification rule.
+message ImageVerificationRuleV1Alpha1 {
+  string rule_image_pattern = 1;
+  bool rule_verify = 3;
+  ImageVerifierV1Alpha1 rule_verifier = 4;
+}
+
+// ImageVerificationVerifierSpec represents a signature verification provider.
+message ImageVerificationVerifierSpec {
+  string issuer = 1;
+  string subject = 2;
+  string subject_regex = 3;
+  string rekor_url = 4;
+}
+
+// ImageVerifierV1Alpha1 configures a signature verification provider.
+message ImageVerifierV1Alpha1 {
+  string keyless_issuer = 1;
+  string keyless_subject = 2;
+  string keyless_subject_regex = 3;
+  string keyless_rekor_url = 4;
+}
+

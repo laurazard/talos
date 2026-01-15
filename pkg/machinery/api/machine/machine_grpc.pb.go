@@ -77,6 +77,7 @@ const (
 	MachineService_MetaDelete_FullMethodName                  = "/machine.MachineService/MetaDelete"
 	MachineService_ImageList_FullMethodName                   = "/machine.MachineService/ImageList"
 	MachineService_ImagePull_FullMethodName                   = "/machine.MachineService/ImagePull"
+	MachineService_ImageVerify_FullMethodName                 = "/machine.MachineService/ImageVerify"
 )
 
 // MachineServiceClient is the client API for MachineService service.
@@ -175,6 +176,8 @@ type MachineServiceClient interface {
 	ImageList(ctx context.Context, in *ImageListRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ImageListResponse], error)
 	// ImagePull pulls an image into the CRI.
 	ImagePull(ctx context.Context, in *ImagePullRequest, opts ...grpc.CallOption) (*ImagePullResponse, error)
+	// ImageVerify verifies an image.
+	ImageVerify(ctx context.Context, in *ImageVerifyRequest, opts ...grpc.CallOption) (*ImageVerifyResponse, error)
 }
 
 type machineServiceClient struct {
@@ -827,6 +830,16 @@ func (c *machineServiceClient) ImagePull(ctx context.Context, in *ImagePullReque
 	return out, nil
 }
 
+func (c *machineServiceClient) ImageVerify(ctx context.Context, in *ImageVerifyRequest, opts ...grpc.CallOption) (*ImageVerifyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ImageVerifyResponse)
+	err := c.cc.Invoke(ctx, MachineService_ImageVerify_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MachineServiceServer is the server API for MachineService service.
 // All implementations must embed UnimplementedMachineServiceServer
 // for forward compatibility.
@@ -923,6 +936,8 @@ type MachineServiceServer interface {
 	ImageList(*ImageListRequest, grpc.ServerStreamingServer[ImageListResponse]) error
 	// ImagePull pulls an image into the CRI.
 	ImagePull(context.Context, *ImagePullRequest) (*ImagePullResponse, error)
+	// ImageVerify verifies an image.
+	ImageVerify(context.Context, *ImageVerifyRequest) (*ImageVerifyResponse, error)
 	mustEmbedUnimplementedMachineServiceServer()
 }
 
@@ -1094,6 +1109,9 @@ func (UnimplementedMachineServiceServer) ImageList(*ImageListRequest, grpc.Serve
 }
 func (UnimplementedMachineServiceServer) ImagePull(context.Context, *ImagePullRequest) (*ImagePullResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ImagePull not implemented")
+}
+func (UnimplementedMachineServiceServer) ImageVerify(context.Context, *ImageVerifyRequest) (*ImageVerifyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ImageVerify not implemented")
 }
 func (UnimplementedMachineServiceServer) mustEmbedUnimplementedMachineServiceServer() {}
 func (UnimplementedMachineServiceServer) testEmbeddedByValue()                        {}
@@ -2000,6 +2018,24 @@ func _MachineService_ImagePull_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MachineService_ImageVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImageVerifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MachineServiceServer).ImageVerify(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MachineService_ImageVerify_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MachineServiceServer).ImageVerify(ctx, req.(*ImageVerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MachineService_ServiceDesc is the grpc.ServiceDesc for MachineService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2174,6 +2210,10 @@ var MachineService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ImagePull",
 			Handler:    _MachineService_ImagePull_Handler,
+		},
+		{
+			MethodName: "ImageVerify",
+			Handler:    _MachineService_ImageVerify_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

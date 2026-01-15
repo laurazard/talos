@@ -1,0 +1,8 @@
+apiVersion: v1alpha1
+kind: ImageVerificationConfig
+rules:
+    - image: ghcr.io/*
+      verify: true
+      verifier:
+        issuer: https://token.actions.githubusercontent.com
+        subjectRegex: https://github.com/myorg/.*

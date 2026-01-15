@@ -103,6 +103,8 @@ service MachineService {
   rpc ImageList(ImageListRequest) returns (stream ImageListResponse);
   // ImagePull pulls an image into the CRI.
   rpc ImagePull(ImagePullRequest) returns (ImagePullResponse);
+  // ImageVerify verifies an image.
+  rpc ImageVerify(ImageVerifyRequest) returns (ImageVerifyResponse);
 }
 
 // rpc applyConfiguration
@@ -1401,4 +1403,14 @@ message ImagePull {
 
 message ImagePullResponse {
   repeated ImagePull messages = 1;
+}
+
+message ImageVerifyRequest {
+  string reference = 1;
+  string digest = 2;
+}
+
+message ImageVerifyResponse {
+  bool ok = 1;
+  string method = 2;
 }
